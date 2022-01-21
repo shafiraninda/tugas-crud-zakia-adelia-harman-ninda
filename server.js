@@ -12,8 +12,11 @@ app.use(express.json())
 
 
 app.get('/', (req,res)=>{
+    const data = fs.readFileSync('./data/data.json', 'utf-8')
+    const dataParsed = JSON.parse(data)
     res.render('main', {
         pageTitle: "Main Page",
+        data: dataParsed
     })
 })
 
@@ -57,7 +60,7 @@ app.get('/edit', (req,res) => {
 })
 
 // Edit
-app.post('/edit', (req, res) =>{
+app.post('/edit', (req, res) => {
     const {id} = req.query
     const {name, email, hashedPassword} = req.body
     const data = fs.readFileSync('./data/data.json', 'utf-8')
@@ -75,6 +78,19 @@ app.post('/edit', (req, res) =>{
     fs.writeFileSync("./data/data.json", JSON.stringify(dataParsed, null, 4))
     res.redirect("/")
 
+})
+
+app.post('/delete', (req, res) => {
+    const {id} = req.query
+    const data = fs.readFileSync('./data/data.json', 'utf-8')
+    const dataParsed = JSON.parse(data)
+
+    const deletedList = dataParsed.filter((item) => {
+        return item.id !== id
+    })
+
+    fs.writeFileSync("./data/data.json", JSON.stringify(deletedList, null, 4))
+    res.redirect("/")
 })
 
 
