@@ -42,6 +42,41 @@ app.post('/add', (req,res)=>{
     
 })
 
+app.get('/edit', (req,res) => {
+    const{id} = req.query
+    const data = fs.readFileSync('./data/data.json', 'utf-8')
+    const dataParsed = JSON.parse(data)
+
+    const dataToEdit = dataParsed.find((item) => {
+        return(item.id = id)
+    })
+    res.render('edit.ejs', {
+        pageTitle:"Edit",
+        data: dataToEdit
+    })
+})
+
+// Edit
+app.post('/edit', (req, res) =>{
+    const {id} = req.query
+    const {name, email, hashedPassword} = req.body
+    const data = fs.readFileSync('./data/data.json', 'utf-8')
+    const dataParsed = JSON.parse(data)
+
+    const dataToEditIndex = dataParsed.findIndex((item) =>{
+        return (item.id = id)
+    })
+    const dataToEdit = {
+        name:name,
+        email:email,
+        hashedPassword:hashedPassword
+    }
+    dataParsed[dataToEditIndex] = dataToEdit
+    fs.writeFileSync("./data/data.json", JSON.stringify(dataParsed, null, 4))
+    res.redirect("/")
+
+})
+
 
 const PORT = 3000
 app.listen(PORT, () => {
