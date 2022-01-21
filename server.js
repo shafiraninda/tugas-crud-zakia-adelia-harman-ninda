@@ -51,7 +51,7 @@ app.get('/edit', (req,res) => {
     const dataParsed = JSON.parse(data)
 
     const dataToEdit = dataParsed.find((item) => {
-        return(item.id = id)
+        return(item.id === id)
     })
     res.render('edit.ejs', {
         pageTitle:"Edit",
@@ -67,9 +67,10 @@ app.post('/edit', (req, res) => {
     const dataParsed = JSON.parse(data)
 
     const dataToEditIndex = dataParsed.findIndex((item) =>{
-        return (item.id = id)
+        return (item.id === id)
     })
     const dataToEdit = {
+        id:id,
         name:name,
         email:email,
         hashedPassword:hashedPassword
@@ -80,7 +81,7 @@ app.post('/edit', (req, res) => {
 
 })
 
-app.post('/delete', (req, res) => {
+app.get('/delete', (req, res) => {
     const {id} = req.query
     const data = fs.readFileSync('./data/data.json', 'utf-8')
     const dataParsed = JSON.parse(data)
