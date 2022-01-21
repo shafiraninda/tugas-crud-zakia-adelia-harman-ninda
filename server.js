@@ -38,9 +38,8 @@ app.post('/add', (req,res)=>{
     }
     dataParsed.push(newData)
     fs.writeFileSync('./data/data.json', JSON.stringify(dataParsed) )
-    res.render('main', {
-        pageTitle: "Main Page"
-    })
+    res.send("SUCCESSFULLY REGISTERED")
+    
 })
 
 
